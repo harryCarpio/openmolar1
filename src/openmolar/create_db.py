@@ -39,7 +39,8 @@ CREATE_QUERY = "CREATE DATABASE %s"
 
 # note for production deployments, only grant
 # select,insert,update,delete privileges
-PRIVS_QUERY = "GRANT ALL PRIVILEGES ON %s.* TO '%s'@'%s' IDENTIFIED BY '%s'"
+#PRIVS_QUERY = "GRANT ALL PRIVILEGES ON %s.* TO '%s'@'%s' IDENTIFIED BY '%s'"
+PRIVS_QUERY = "GRANT ALL PRIVILEGES ON %s.* TO '%s'@'%s' WITH GRANT OPTION"
 
 CHECK_SUPERVISOR_QUERY = '''
 SELECT Create_priv, Drop_priv, Trigger_priv FROM user WHERE User=%s and Host=%s
@@ -128,8 +129,9 @@ def create_database(host_, port_, user_, pass_wd, db_name,
         cursor.execute(CREATE_QUERY % db_name)
 
         LOGGER.info("setting privileges for '%s'", user_)
-        cursor.execute(PRIVS_QUERY % (db_name, user_, host_, pass_wd))
-        cursor.close()
+        ######cursor.execute(PRIVS_QUERY % (db_name, user_, host_, pass_wd))
+        #cursor.execute(PRIVS_QUERY % (db_name, user_, host_))
+        #cursor.close()
         db.commit()
         db.close()
         LOGGER.info("db created successfully")
